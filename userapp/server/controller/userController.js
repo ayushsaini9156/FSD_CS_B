@@ -1,37 +1,32 @@
 const User = require("../model/userModel");
-const getAllUsers = async (req,res)=>{
-    try{
-        const user = await User.find();
-        res.status(200).json(user);
-        
-    }
-    catch(err){
-        res.status(500).json({
-            message:err.message
-        });
-    }
-}
-const getUser=async (req,res)=>{
-    try{
-        const email = res.params.email;
-        const user = await User.findOne({email});
-        res.status(200).json(user);
-        
-    }
-    catch(err){
-        res.status(500).json({
-            message:err.message
-        });
-    }
-}
-const createUser = async (req,res) => {
+const getAllUsers = async (req, res) => {
   try {
-    const {name,email,password,role} = req.body;
-    const newUser = new User({name,email,password,role});
+    const user = await User.find();
+    res.status(200).json(user);
+  } catch (err) {
+    res.status(500).json({
+      message: err.message,
+    });
+  }
+};
+const getUser = async (req, res) => {
+  try {
+    const email = req.params.email;
+    const user = await User.findOne({ email });
+    res.status(200).json(user);
+  } catch (err) {
+    res.status(500).json({
+      message: err.message,
+    });
+  }
+};
+const createUser = async (req, res) => {
+  try {
+    const { name, email, password, role } = req.body;
+    const newUser = new User({ name, email, password, role });
     const user = await newUser.save();
     res.status(200).json(user);
-  } 
-  catch (err) {
+  } catch (err) {
     res.status(500).json({
       message: err.message,
     });
@@ -40,9 +35,13 @@ const createUser = async (req,res) => {
 const editUser = async (req, res) => {
   try {
     const email = req.params.email;
-    const {name,password,role} = req.body;
-   
-    const updateduser = User.findOneAndUpdate({email},{name,password,role},{new:true})
+    const { name, password, role } = req.body;
+
+    const updateduser = User.findOneAndUpdate(
+      { email },
+      { name, password, role },
+      { new: true }
+    );
     res.status(200).json(updateduser);
   } catch (err) {
     res.status(500).json({
@@ -53,8 +52,8 @@ const editUser = async (req, res) => {
 const deleteUser = async (req, res) => {
   try {
     const email = req.params.email;
-    
-    const deleteduser = await User.deleteOne({email});
+
+    const deleteduser = await User.deleteOne({ email });
     res.status(200).json(deleteduser);
   } catch (err) {
     res.status(500).json({
@@ -62,4 +61,4 @@ const deleteUser = async (req, res) => {
     });
   }
 };
-module.exports = {getAllUsers,getUser,createUser,editUser,deleteUser};
+module.exports = { getAllUsers, getUser, createUser, editUser, deleteUser };
